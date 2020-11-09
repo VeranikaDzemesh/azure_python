@@ -18,8 +18,12 @@ steps:
 - script: python -m pip install --upgrade pip setuptools wheel
   displayName: 'Install tools'
  
-- script: pip install -r requirements.txt
-  displayName: 'Install requirements'
+- script: |
+    pip install pytest
+    pip install allure
+    pip install pytest-cov
+    pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+  displayName: 'Test with pytest'
   
 - script: pytest tests
   displayName: 'Run tests'
