@@ -21,7 +21,7 @@ steps:
 - script: pip freeze > requirements.txt && pip install -r requirements.txt
   displayName: 'Install requirements'
   
-- script: python -m pytest --alluredir=allure_results
+- script: pip uninstall pytest && pip install pytest && pytest tests
   displayName: 'Run tests'
   
 - script: |
