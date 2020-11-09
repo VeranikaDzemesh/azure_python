@@ -18,9 +18,7 @@ steps:
 - script: python -m pip install --upgrade pip setuptools wheel
   displayName: 'Install tools'
  
-- script: |
-    pip freeze > requirements.txt
-    pip install -r requirements.txt
+- script: pip install -r requirements.txt
   displayName: 'Install requirements'
   
 - script: pytest tests
