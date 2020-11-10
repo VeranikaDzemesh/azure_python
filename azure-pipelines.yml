@@ -7,28 +7,30 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default
+variables:
+  python.version: '3.7'
+  threads: '3'
+  server: 'BENDER'
+  executor: 'LOCAL'
+  browser: 'CHROME'
+  config: 'config.json'
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.7'
+    versionSpec: $(python.version)
     addToPath: true 
     
-- script: python -m pip install --upgrade pip setuptools wheel
-  displayName: 'Install tools'
- 
-- script: |
-    pip install pytest
-    pip install allure
-    pip install pytest-cov
-    pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
-  displayName: 'Test with pytest'
-  
-- script: pytest tests
-  displayName: 'Run tests'
-  
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
+  displayName: 'Install dependencies'
+
+- script: 'pip install pytest && py.test tests --tx $(threads)*popen --dist=load --alluredir=allure_results --server=$(server) --params=$(config) --executor=$(executor) --browser=$(browser)'
+  displayName: pytest
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/allure-results'
+  inputs:
+    testResultsFiles: '**/allure-results'
+    testRunTitle: 'Python $(python.version)'
+
