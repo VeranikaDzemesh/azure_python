@@ -46,4 +46,8 @@ steps:
     testResultsFiles: 'test-results.xml'
     testRunTitle: 'my_test_results'        
     publishRunAttachments: true
+- task: AllureGenerate@1
+  inputs:
+    resultsDir: 'allure-results'
+    targetDir: 'allure-report/$(Build.BuildNumber)'
 
