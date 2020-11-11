@@ -20,10 +20,11 @@ steps:
 - script: 'ls -la'
   displayName: 'Show al files'    
     
-- script: 'python -m pip install --upgrade pip && pip install allure-pytest && pip install allure-python-commons && pip install pytest && pip install pytest-assume'
+- script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
   displayName: 'Install dependencies'
 
 - script: 'py.test --alluredir=allure-results tests'
+  continueOnError: true 
   displayName: 'Run tests'
 
 - script: 'allure serve allure-results'
