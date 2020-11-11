@@ -33,9 +33,9 @@ steps:
     publishRunAttachments: true
   displayName: 'Publish as Junit'
     
-- task: AllureGenerate@1
-  continueOnError: true 
+- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
   inputs:
     resultsDir: 'allure-results'
+    targetDir: 'allure-report/$(Build.BuildNumber)'
   displayName: 'Generate Allure Report'
 
