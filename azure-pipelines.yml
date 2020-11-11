@@ -37,6 +37,5 @@ steps:
   continueOnError: true 
   inputs:
     resultsDir: 'allure-results'
-    targetDir: 'allure-report/$(Build.BuildNumber)'
   displayName: 'Generate Allure Report'
 
