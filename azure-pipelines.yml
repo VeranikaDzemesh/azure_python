@@ -17,10 +17,10 @@ steps:
     versionSpec: $(python.version)
     addToPath: true 
     
-- script: 'python -m pip install --upgrade pip && pip install allure'
+- script: 'python -m pip install --upgrade pip && pip install allure-pytest && allure-python-commons && pip install pytest && pip install pytest-assume'
   displayName: 'Install dependencies'
 
-- script: 'pip install pytest && py.test tests'
+- script: 'py.test --alluredir=allure-results ./tests'
   displayName: 'Run tests'
 
 - task: PublishTestResults@2
