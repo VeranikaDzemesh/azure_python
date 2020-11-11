@@ -7,15 +7,10 @@ trigger:
 - master
 
 pool:
-  name: Default
+    vmImage: 'ubuntu-16.04'
 variables:
   python.version: '3.7'
-  threads: '3'
-  server: 'BENDER'
-  executor: 'LOCAL'
-  browser: 'CHROME'
-  config: 'config.json'
-
+ 
 steps:
 - task: UsePythonVersion@0
   inputs:
@@ -25,8 +20,8 @@ steps:
 - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
   displayName: 'Install dependencies'
 
-- script: 'pip install pytest && py.test tests --tx $(threads)*popen --dist=load --alluredir=allure_results --server=$(server) --params=$(config) --executor=$(executor) --browser=$(browser)'
-  displayName: pytest
+- script: 'pip install pytest && py.test tests'
+  displayName: 'Run tests'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/allure-results'
