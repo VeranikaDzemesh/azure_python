@@ -1,0 +1,34 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+    vmImage: 'ubuntu-16.04'
+variables:
+  python.version: '3.7'
+ 
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: $(python.version)
+    addToPath: true 
+    
+- script: 'python -m pip install --upgrade pip && pip install allure-pytest && pip install allure-python-commons && pip install pytest && pip install pytest-assume'
+  displayName: 'Install dependencies'
+
+- script: 'py.test --alluredir=allure-results tests'
+  displayName: 'Run tests'
+
+- script: 'allure serve allure-results'
+  displayName: 'Some allure shit'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/allure-results'
+  inputs:
+    testResultsFiles: '**/allure-results'
+    testRunTitle: 'Python $(python.version)'
+
