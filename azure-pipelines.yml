@@ -28,11 +28,17 @@ steps:
   displayName: 'Run tests'
 
 - script: 'allure serve allure-results'
+  continueOnError: true
   displayName: 'Some allure shit'
 
+#- task: PublishTestResults@2
+#  displayName: 'Publish Test Results **/allure-results'
+#  inputs:
+#    testResultsFiles: '**/allure-results'
+#    testRunTitle: 'Python $(python.version)'
 - task: PublishTestResults@2
-  displayName: 'Publish Test Results **/allure-results'
   inputs:
-    testResultsFiles: '**/allure-results'
-    testRunTitle: 'Python $(python.version)'
+    testResultsFormat: 'XUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)/results'
 
