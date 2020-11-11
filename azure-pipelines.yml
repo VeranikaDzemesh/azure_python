@@ -13,9 +13,8 @@ variables:
  
 steps:
 
-- script: 'sudo apt-add-repository ppa:qameta/allure'
-- script: 'sudo apt-get update' 
-- script: 'sudo apt-get install allure'
+- script: 'sudo apt-add-repository ppa:qameta/allure sudo apt-get update sudo apt-get install allure'
+  displayName: 'Install Allure'
 
 - task: UsePythonVersion@0
   inputs:
