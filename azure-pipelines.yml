@@ -23,7 +23,7 @@ steps:
 - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
   displayName: 'Install dependencies'
 
-- script: 'py.test --alluredir=allure-results tests'
+- script: 'py.test --alluredir=allure-results tests --junitxml=test-results.xml'
   continueOnError: true 
   displayName: 'Run tests'
 
@@ -38,7 +38,7 @@ steps:
 #    testRunTitle: 'Python $(python.version)'
 - task: PublishTestResults@2
   inputs:
-    testResultsFormat: 'XUnit'
+    testResultsFormat: 'JUnit'
     testResultsFiles: '**/TEST-*.xml'
-    searchFolder: '$(System.DefaultWorkingDirectory)/results'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
