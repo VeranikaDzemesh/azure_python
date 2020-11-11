@@ -15,10 +15,7 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: $(python.version)
-    addToPath: true     
-
-- script: 'ls -la'
-  displayName: 'Show al files'    
+    addToPath: true      
     
 - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
   displayName: 'Install dependencies'
@@ -26,19 +23,7 @@ steps:
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
   displayName: 'Run tests'
- 
-- script: 'ls -la'
-  displayName: 'Show al files'
 
-- script: 'allure serve allure-results'
-  continueOnError: true
-  displayName: 'Some allure shit'
-
-#- task: PublishTestResults@2
-#  displayName: 'Publish Test Results **/allure-results'
-#  inputs:
-#    testResultsFiles: '**/allure-results'
-#    testRunTitle: 'Python $(python.version)'
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -48,7 +33,7 @@ steps:
     publishRunAttachments: true
   displayName: 'Publish as Junit'
     
-- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
+- task: AllureGenerate@1
   inputs:
     resultsDir: 'allure-results'
     targetDir: 'allure-report/$(Build.BuildNumber)'
