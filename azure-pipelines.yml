@@ -40,7 +40,10 @@ steps:
 #    testResultsFiles: '**/allure-results'
 #    testRunTitle: 'Python $(python.version)'
 - task: PublishTestResults@2
+  condition: succeededOrFailed()
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'test-results.xml'
+    testRunTitle: 'my_test_results'        
+    publishRunAttachments: true
 
