@@ -8,5 +8,5 @@ def test_two_and_two():
     with assume:
         assert num1 + num2 == 4
     with assume:
-        assert num1 * num2 == 6
+        assert num1 * num2 == 4
 
