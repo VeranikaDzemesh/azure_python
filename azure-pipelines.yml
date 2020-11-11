@@ -12,6 +12,11 @@ variables:
   python.version: '3.7'
  
 steps:
+
+- script: 'sudo apt-add-repository ppa:qameta/allure'
+- script: 'sudo apt-get update' 
+- script: 'sudo apt-get install allure'
+
 - task: UsePythonVersion@0
   inputs:
     versionSpec: $(python.version)
