@@ -26,6 +26,9 @@ steps:
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
   displayName: 'Run tests'
+ 
+- script: 'ls -la'
+  displayName: 'Show al files'
 
 - script: 'allure serve allure-results'
   continueOnError: true
