@@ -46,8 +46,11 @@ steps:
     testResultsFiles: 'test-results.xml'
     testRunTitle: 'my_test_results'        
     publishRunAttachments: true
-- task: AllureGenerate@1
+  displayName: 'Publish as Junit'
+    
+- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
   inputs:
     resultsDir: 'allure-results'
     targetDir: 'allure-report/$(Build.BuildNumber)'
+  displayName: 'Generate Allure Report'
 
