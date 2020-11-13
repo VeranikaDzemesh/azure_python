@@ -39,6 +39,12 @@ steps:
     testRunTitle: 'my_test_results'        
     publishRunAttachments: true
   displayName: 'Publish as Junit'
+
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    dockerComposeFile: 'docker-compose.yml'
+    action: 'Run a Docker Compose command'
     
 - task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
   continueOnError: true 
