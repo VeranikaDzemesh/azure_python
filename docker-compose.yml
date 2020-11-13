@@ -4,7 +4,7 @@ services:
   allure:
     image: "frankescobar/allure-docker-service"
     environment:
-      CHECK_RESULTS_EVERY_SECONDS: NONE
+      CHECK_RESULTS_EVERY_SECONDS: 3
       KEEP_HISTORY: 1
       KEEP_HISTORY_LATEST: 25
     ports:
