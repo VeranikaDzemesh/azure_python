@@ -34,6 +34,7 @@ steps:
   displayName: 'Deploy allure docker server'
 
 - task: InvokeRESTAPI@1
+  continueOnError: true 
   inputs:
     connectionType: 'connectedServiceName'
     method: 'POST'
@@ -44,6 +45,9 @@ steps:
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
   displayName: 'Run tests'  
+
+- script: 'ls -la && cd projects/default/reports && ls -la'
+  displayName: 'Show al files'  
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
