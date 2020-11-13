@@ -33,14 +33,6 @@ steps:
     script: 'docker-compose up -d allure allure-ui'
   displayName: 'Deploy allure docker server'
 
-- task: InvokeRESTAPI@1
-  continueOnError: true 
-  inputs:
-    connectionType: 'connectedServiceName'
-    method: 'POST'
-    body: '{"id": "azure_python"}'
-    urlSuffix: 'http://localhost:5050/allure-docker-service/projects'
-    waitForCompletion: 'false'
 
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
