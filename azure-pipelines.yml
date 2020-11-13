@@ -30,6 +30,11 @@ steps:
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
   displayName: 'Run tests'
+  
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'docker-compose up -d allure allure-ui'
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
@@ -40,11 +45,6 @@ steps:
     publishRunAttachments: true
   displayName: 'Publish as Junit'
 
-- task: DockerCompose@0
-  inputs:
-    containerregistrytype: 'Azure Container Registry'
-    dockerComposeFile: 'docker-compose.yml'
-    action: 'Run a Docker Compose command'
     
 - task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
   continueOnError: true 
