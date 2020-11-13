@@ -38,7 +38,7 @@ steps:
   continueOnError: true 
   displayName: 'Run tests'  
 
-- script: 'ls -la && cd projects/default/reports && ls -la'
+- script: 'ls -la && cd projects && cd default && cd reports && ls -la'
   displayName: 'Show al files'  
 
 - task: PublishTestResults@2
