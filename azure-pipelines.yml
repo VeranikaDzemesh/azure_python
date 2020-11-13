@@ -38,7 +38,7 @@ steps:
   
 - task: CmdLine@2
   inputs:
-    script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure_python"}'' | grep }| python -mjson.tool'
+    script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python"}'' | grep }| python -mjson.tool'
 
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true 
