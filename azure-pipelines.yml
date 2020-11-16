@@ -22,38 +22,45 @@ steps:
 #    sudo apt-get update
 #    sudo apt-get install allure
 #  displayName: 'Install Allure'
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: $(python.version)
-      addToPath: true
 
-  - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
-    displayName: 'Install dependencies'
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: 'docker-compose up -d allure allure-ui'
-    displayName: 'Deploy allure docker'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: $(python.version)
+    addToPath: true
+
+- script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
+  displayName: 'Install dependencies'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'docker-compose up -d allure allure-ui'
+  displayName: 'Deploy allure docker'
     
-  - script: 'ls -la'
-    displayName: 'Show all files'
+- script: 'ls -la'
+  displayName: 'Show all files'
 
-  - task: CmdLine@2
-    inputs:
-      script: 'curl -X POST http://localhost:5050/allure-docker-service/login -H 'Content-Type: application/json' -d '{"username": "ver", "password": "ver"}' -c cookiesFile -ik && CRSF_ACCESS_TOKEN_VALUE=$(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2) && echo "csrf_access_token value: $CRSF_ACCESS_TOKEN_VALUE" && curl -X POST "http://localhost:5050/allure-docker-service/projects" -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik'
-  - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
-    continueOnError: true
-    displayName: 'Run tests'
-  - script: 'ls -la && cd projects &&  ls -la'
-    displayName: 'Show all files'
-  - task: PublishTestResults@2
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'test-results.xml'
-      testRunTitle: 'my_test_results'
-      publishRunAttachments: true
-    displayName: 'Publish as Junit'
+- task: CmdLine@2
+  inputs:
+    script: |
+      curl -X POST http://localhost:5050/allure-docker-service/login -H 'Content-Type: application/json' -d '{"username": "ver", "password": "ver"}' -c cookiesFile -ik 
+      CRSF_ACCESS_TOKEN_VALUE=$(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2) 
+      echo "csrf_access_token value: $CRSF_ACCESS_TOKEN_VALUE"
+      curl -X POST "http://localhost:5050/allure-docker-service/projects" -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik
+  
+- script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
+  continueOnError: true
+  displayName: 'Run tests'
+- script: 'ls -la && cd projects &&  ls -la'
+  displayName: 'Show all files'
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results.xml'
+    testRunTitle: 'my_test_results'
+    publishRunAttachments: true
+  displayName: 'Publish as Junit'
 
 
 
