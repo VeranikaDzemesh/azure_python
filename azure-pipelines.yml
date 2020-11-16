@@ -30,7 +30,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: 'docker-compose up -d allure allure-ui'
+    script: 'MY_USER=$(id -u):$(id -g) docker-compose up -d allure allure-ui'
   displayName: 'Deploy allure docker server'
 
 - script: 'ls -la'
