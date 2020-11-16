@@ -57,10 +57,10 @@ steps:
   displayName: 'Publish as Junit'
 
     
-- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
-  continueOnError: true 
-  inputs:
-    resultsDir: 'allure-results'
-    targetDir: 'allure-report/$(Build.BuildNumber)'
-  displayName: 'Generate Allure Report'
+#- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
+#  continueOnError: true 
+#  inputs:
+#    resultsDir: 'allure-results'
+#    targetDir: 'allure-report/$(Build.BuildNumber)'
+#  displayName: 'Generate Allure Report'
 
