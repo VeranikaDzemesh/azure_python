@@ -8,17 +8,14 @@ trigger:
 variables:
   python.version: '3.7'
 
-resources:
-  containers:
-    - container: ubuntu
-      image: ubuntu:18.04
-      
+
 stages:
   - stage: STAGE1
     jobs:
       - job: Allure
         displayName: 'Allure docker'
-        container: ubuntu
+        pool:
+          vmImage: 'ubuntu-latest'
    
         steps:
           - task: Bash@3
@@ -33,7 +30,8 @@ stages:
     jobs:
       - job: Test1
         displayName: 'Run test 1'
-        container: ubuntu
+        pool:
+          vmImage: 'ubuntu-latest'
 
         steps:
           - task: UsePythonVersion@0
@@ -64,7 +62,8 @@ stages:
     
       - job: Test2
         displayName: 'Run test 2'
-        container: ubuntu
+        pool:
+          vmImage: 'ubuntu-latest'
 
         steps:
           - task: UsePythonVersion@0
