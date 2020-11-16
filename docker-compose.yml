@@ -3,8 +3,11 @@ version: '3'
 services:
   allure:
     image: "frankescobar/allure-docker-service"
-    user: 1000:1000
     environment:
+      TLS: 1
+      SECURITY_USER: "ver"
+      SECURITY_PASS: "ver"
+      SECURITY_ENABLED: 1
       CHECK_RESULTS_EVERY_SECONDS: NONE
       KEEP_HISTORY: 1
       KEEP_HISTORY_LATEST: 25
