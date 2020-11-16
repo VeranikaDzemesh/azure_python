@@ -44,8 +44,8 @@ steps:
   inputs:
     script: |
       curl -X POST http://localhost:5050/allure-docker-service/login -H 'Content-Type: application/json' -d '{"username": "ver", "password": "ver"}' -c cookiesFile -ik 
-      curl -X POST "http://localhost:5050/allure-docker-service/projects" -H "X-CSRF-TOKEN: $(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2)" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik
-      echo $(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2)
+      curl -X POST "http://localhost:5050/allure-docker-service/projects" -H "X-CSRF-TOKEN: $(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2)" -H "access_token_cookie: $(cat cookiesFile | grep -o 'access_token.*' | cut -f2)" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik
+      echo cat cookiesFile 
   displayName: 'Login'
   
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
