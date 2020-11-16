@@ -13,11 +13,11 @@ variables:
  
 steps:
 
-- script: |
-    sudo apt-add-repository ppa:qameta/allure
-    sudo apt-get update
-    sudo apt-get install allure
-  displayName: 'Install Allure'
+#- script: |
+#    sudo apt-add-repository ppa:qameta/allure
+#    sudo apt-get update
+#    sudo apt-get install allure
+#  displayName: 'Install Allure'
 
 - task: UsePythonVersion@0
   inputs:
@@ -30,8 +30,8 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: 'MY_USER=$(id -u):$(id -g) docker-compose up -d allure allure-ui'
-  displayName: 'Deploy allure docker server'
+    script: 'docker-compose up -d allure allure-ui'
+  displayName: 'Deploy allure docker'
 
 - script: 'ls -la'
   displayName: 'Show all files'  
