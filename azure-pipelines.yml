@@ -5,57 +5,89 @@
 
 trigger:
 - master
-
-pool:
-  vmImage: 'ubuntu-16.04'
 variables:
   python.version: '3.7'
- 
-steps:
-
-#- script: |
-#    sudo apt-add-repository ppa:qameta/allure
-#    sudo apt-get update
-#    sudo apt-get install allure
-#  displayName: 'Install Allure'
-
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: $(python.version)
-    addToPath: true      
-    
-- script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
-  displayName: 'Install dependencies'
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'docker-compose up -d allure allure-ui'
-  displayName: 'Deploy allure docker'
-
-- script: 'ls -la'
-  displayName: 'Show all files'  
   
-- task: CmdLine@2
-  inputs:
-    script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python"}'' | grep }| python -mjson.tool'
+jobs:
 
-- script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
-  continueOnError: true 
-  displayName: 'Run tests'  
+- job: Allure
+  displayName: 'Allure socker'
+  pool:
+    vmImage: 'ubuntu-latest'
+   
+  steps:
+  
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: 'docker-compose up -d allure allure-ui'
+    displayName: 'Deploy allure docker'
 
-- script: 'ls -la && cd projects &&  ls -la'
-  displayName: 'Show all files'  
+- job: Test1
+  displayName: 'Run test 1'
+  pool:
+    vmImage: 'ubuntu-latest'
+   
+  steps:
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'test-results.xml'
-    testRunTitle: 'my_test_results'        
-    publishRunAttachments: true
-  displayName: 'Publish as Junit'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(python.version)
+      addToPath: true      
+    
+  - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
+    displayName: 'Install dependencies'
+    
+  - task: CmdLine@2
+    inputs:
+      script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
+      
+  - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure_reporttests'
+    continueOnError: true 
+    displayName: 'Run tests'  
 
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'test-results.xml'
+      testRunTitle: 'my_test_results'        
+      publishRunAttachments: true
+    displayName: 'Publish as Junit 1'
+    
+- job: Test2
+  displayName: 'Run test 2'
+  pool:
+    vmImage: 'ubuntu-latest'
+   
+  steps:
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(python.version)
+      addToPath: true      
+    
+  - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
+    displayName: 'Install dependencies'
+    
+    
+  - task: CmdLine@2
+    inputs:
+      script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
+      
+  - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure_reporttests'
+    continueOnError: true 
+    displayName: 'Run tests'  
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'test-results.xml'
+      testRunTitle: 'my_test_results'        
+      publishRunAttachments: true
+    displayName: 'Publish as Junit 2' 
+   
     
 #- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
 #  continueOnError: true 
