@@ -16,16 +16,16 @@ resources:
 stages:
   - stage: STAGE1
     jobs:
-    - job: Allure
-      displayName: 'Allure docker'
-      container: ubuntu
+      - job: Allure
+        displayName: 'Allure docker'
+        container: ubuntu
    
-    steps:
-      - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: 'docker-compose up -d allure allure-ui'
-          displayName: 'Deploy allure docker'
+        steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: 'docker-compose up -d allure allure-ui'
+            displayName: 'Deploy allure docker'
 
 
   - stage: STAGE2
@@ -37,61 +37,61 @@ stages:
 
         steps:
           - task: UsePythonVersion@0
-              inputs:
-                versionSpec: $(python.version)
-                  addToPath: true
+            inputs:
+              versionSpec: $(python.version)
+              addToPath: true
     
           - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
-              displayName: 'Install dependencies'
+            displayName: 'Install dependencies'
     
           - task: CmdLine@2
-              continueOnError: true
-              inputs:
-                script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
+            continueOnError: true
+            inputs:
+              script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
       
           - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure_reporttests'
-              continueOnError: true
-              displayName: 'Run tests'
+            continueOnError: true
+            displayName: 'Run tests'
 
           - task: PublishTestResults@2
-              condition: succeededOrFailed()
-              inputs:
-                 testResultsFormat: 'JUnit'
-                 testResultsFiles: 'test-results.xml'
-                 testRunTitle: 'my_test_results'
+            condition: succeededOrFailed()
+            inputs:
+                testResultsFormat: 'JUnit'
+                testResultsFiles: 'test-results.xml'
+                testRunTitle: 'my_test_results'
                 publishRunAttachments: true
-               displayName: 'Publish as Junit 1'
+            displayName: 'Publish as Junit 1'
     
-      - job: Test1
+      - job: Test2
         displayName: 'Run test 2'
         container: ubuntu
 
         steps:
           - task: UsePythonVersion@0
-              inputs:
-                versionSpec: $(python.version)
-                  addToPath: true
+            inputs:
+              versionSpec: $(python.version)
+              addToPath: true
 
           - script: 'python -m pip install --upgrade pip && pip install -r requirements.txt'
-              displayName: 'Install dependencies'
+            displayName: 'Install dependencies'
 
           - task: CmdLine@2
-              continueOnError: true
-              inputs:
-                script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
+            continueOnError: true
+            inputs:
+              script: 'curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d ''{"id":"azure-python-1"}'' | grep }| python -mjson.tool'
 
           - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure_reporttests'
-              continueOnError: true
-              displayName: 'Run tests'
+            continueOnError: true
+            displayName: 'Run tests'
 
           - task: PublishTestResults@2
-              condition: succeededOrFailed()
-              inputs:
-                 testResultsFormat: 'JUnit'
-                 testResultsFiles: 'test-results.xml'
-                 testRunTitle: 'my_test_results'
+            condition: succeededOrFailed()
+            inputs:
+                testResultsFormat: 'JUnit'
+                testResultsFiles: 'test-results.xml'
+                testRunTitle: 'my_test_results'
                 publishRunAttachments: true
-               displayName: 'Publish as Junit 2'
+            displayName: 'Publish as Junit 2'
     
 #- task: ivang7.allure-test-reports.allure-generate.AllureGenerate@1
 #  continueOnError: true 
