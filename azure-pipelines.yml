@@ -43,16 +43,22 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      curl -X POST http://localhost:5050/allure-docker-service/login -H 'Content-Type: application/json' -d '{"username": "ver", "password": "ver"}' -c cookiesFile -ik 
-      CRSF_ACCESS_TOKEN_VALUE=$(cat cookiesFile | grep -o 'csrf_access_token.*' | cut -f2)
-      echo "csrf_access_token value: $CRSF_ACCESS_TOKEN_VALUE"
       curl -X GET http://localhost:5050/allure-docker-service/projects -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -b cookiesFile -ik
       curl -X POST http://localhost:5050/allure-docker-service/projects -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik
-  displayName: 'Login'
+  displayName: 'Check availability'
   
 - script: 'py.test -o junit_family=xunit2 --junitxml=test-results.xml --alluredir=allure-results tests'
   continueOnError: true
   displayName: 'Run tests'
+
+- task: CmdLine@2
+  timeoutInMinutes: 1
+  inputs:
+    script: |
+      curl -X GET http://localhost:5050/allure-docker-service/projects -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -b cookiesFile -ik
+      curl -X POST http://localhost:5050/allure-docker-service/projects -H "X-CSRF-TOKEN: $CRSF_ACCESS_TOKEN_VALUE" -H "Content-Type: application/json" -d '{"id": "azure-python"}' -b cookiesFile -ik
+  displayName: 'Check availability'
+
 - script: 'ls -la && cd projects &&  ls -la'
   displayName: 'Show all files'
 - task: PublishTestResults@2
