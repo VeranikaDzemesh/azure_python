@@ -7,7 +7,7 @@ volumes:
 services:
   allure-docker-service:
     build:
-      context: ../azure_python
+      context: ../1/s
       dockerfile: docker-custom/Dockerfile.bionic-custom
       args:
         ALLURE_RELEASE: "2.13.5"
