@@ -5,26 +5,30 @@ volumes:
     driver: local
 
 services:
-  allure:
-    image: "frankescobar/allure-docker-service"
+  allure-docker-service:
+    build:
+      context: ../allure-docker-service
+      dockerfile: docker-custom/Dockerfile.bionic-custom
+      args:
+        ALLURE_RELEASE: "2.13.5"
     environment:
       DEV_MODE: 0
-      CHECK_RESULTS_EVERY_SECONDS: 3
+      CHECK_RESULTS_EVERY_SECONDS: NONE
       KEEP_HISTORY: 1
-      KEEP_HISTORY_LATEST: 25
+      KEEP_HISTORY_LATEST: 5
       #URL_PREFIX: "/my-prefix"
-      SECURITY_USER: "ver"
-      SECURITY_PASS: "ver"
+      SECURITY_USER: "my_username"
+      SECURITY_PASS: "my_password"
       SECURITY_ENABLED: 0
     ports:
-      - "5050:5050"
+      - "${ALLURE_DOCKER_SERVICE_API_PORT}:5050"
     volumes:
-      - ./projects:/app/projects
+      - ./.data/allure-docker-service/allure-results:/app/allure-results
 
   allure-ui:
     image: "frankescobar/allure-docker-service-ui"
     environment:
-      ALLURE_DOCKER_PUBLIC_API_URL: "http://localhost:5050"
+      ALLURE_DOCKER_PUBLIC_API_URL: "http://localhost:${ALLURE_DOCKER_SERVICE_API_PORT}"
       ALLURE_DOCKER_PUBLIC_API_URL_PREFIX: ""
     ports:
       - "7474:5252"
