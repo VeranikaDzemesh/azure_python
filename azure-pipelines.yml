@@ -45,14 +45,16 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d '{"id":$(proj-id-1)}' | grep }| python -mjson.tool
+      curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d '{"id":"$(proj-id-1)"}' | grep }| python -mjson.tool
+  continueOnError: true
   displayName: 'Create project 1'
 
 
 - task: CmdLine@2
   inputs:
     script: |
-      curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d '{"id":$(proj-id-2)}' | grep }| python -mjson.tool
+      curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:5050/allure-docker-service/projects -d '{"id":"$(proj-id-2)"}' | grep }| python -mjson.tool
+  continueOnError: true
   displayName: 'Create project 2'
   
 - task: CmdLine@2
@@ -68,12 +70,14 @@ steps:
 - task: Bash@3
   inputs:
     filePath: 'send-results-1.sh'
-  displayName: 'Send results'
+  continueOnError: true
+  displayName: 'Send results 1'
   
 - task: Bash@3
   inputs:
     filePath: 'send-results-2.sh'
-  displayName: 'Send results'
+  continueOnError: true
+  displayName: 'Send results 2'
   
 - task: CmdLine@2
   timeoutInMinutes: 1
