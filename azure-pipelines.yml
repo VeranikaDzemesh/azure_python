@@ -50,6 +50,10 @@ steps:
   continueOnError: true
   displayName: 'Run tests'
 
+- task: Bash@3
+  inputs:
+    filePath: 'send-results.sh'
+  displayName: 'Send results'
 - task: CmdLine@2
   timeoutInMinutes: 1
   inputs:
