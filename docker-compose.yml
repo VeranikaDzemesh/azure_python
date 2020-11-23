@@ -9,7 +9,7 @@ version: '3'
 services:
   allure:
     image: "frankescobar/allure-docker-service"
-    user: 1000:1000
+    user: ${MY_USER}
     environment:
       DEV_MODE: 0
       CHECK_RESULTS_EVERY_SECONDS: 3
@@ -26,7 +26,6 @@ services:
 
   allure-ui:
     image: "frankescobar/allure-docker-service-ui"
-    user: 1000:1000
     environment:
       ALLURE_DOCKER_PUBLIC_API_URL: "http://localhost:5050"
       ALLURE_DOCKER_PUBLIC_API_URL_PREFIX: ""
