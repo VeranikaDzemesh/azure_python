@@ -62,7 +62,10 @@ steps:
   displayName: 'Check availability'
 
 - script: 'ls -la && cd allure-reports &&  ls -la'
-  displayName: 'Show all files'
+  displayName: 'Show all results files'
+  
+- script: 'ls -la && cd projects &&  ls -la'
+  displayName: 'Show all projects files'
   
 - task: PublishTestResults@2
   condition: succeededOrFailed()
