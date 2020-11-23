@@ -5,11 +5,25 @@ ALLURE_RESULTS_DIRECTORY='allure-results'
 # This url is where the Allure container is deployed. We are using localhost as example
 ALLURE_SERVER='http://localhost:5050'
 # Project ID according to existent projects in your Allure container - Check endpoint for project creation >> `[POST]/projects`
-PROJECT_ID='azure-python-2'
 #PROJECT_ID='my-project-id'
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 FILES_TO_SEND=$(ls -dp $DIR/$ALLURE_RESULTS_DIRECTORY/* | grep -v /$)
+
+for ARGUMENT in "$@"
+do
+
+    KEY=$(echo $ARGUMENT | cut -f1 -d=)
+    VALUE=$(echo $ARGUMENT | cut -f2 -d=)   
+
+    case "$KEY" in
+            PROJECT_ID)              PROJECT_ID=${VALUE} ;;  
+            *)   
+    esac    
+
+
+done
+
 if [ -z "$FILES_TO_SEND" ]; then
   exit 1
 fi

@@ -69,13 +69,15 @@ steps:
 
 - task: Bash@3
   inputs:
-    filePath: 'send-results-1.sh'
+    targetType: 'inline'
+    script: 'bash send-results.sh PROJECT_ID=$(proj-id-1)'
   continueOnError: true
   displayName: 'Send results 1'
   
 - task: Bash@3
   inputs:
-    filePath: 'send-results-2.sh'
+    targetType: 'inline'
+    script: 'bash send-results.sh PROJECT_ID=$(proj-id-2)'
   continueOnError: true
   displayName: 'Send results 2'
   
